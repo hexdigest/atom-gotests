@@ -1,0 +1,26 @@
+{
+    "context-menu": {
+        "atom-text-editor[data-grammar~=\"go\"]:not([mini])": [
+            {
+                "label": "Generate Go tests",
+                "command": "gotests:generate"
+            }
+        ]
+    },
+    "menu": [
+        {
+            "label": "Packages",
+            "submenu": [
+                {
+                    "label": "Go tests",
+                    "submenu": [
+                        {
+                            "label": "Generate",
+                            "command": "gotests:generate"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
