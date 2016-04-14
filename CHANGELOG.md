@@ -1,3 +1,6 @@
+## 0.2.3
+* Removed debug console output
+
 ## 0.2.2
 * Fix regexp to extract function names
 
