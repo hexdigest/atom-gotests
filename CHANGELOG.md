@@ -1,3 +1,6 @@
+## 0.2.2
+* Fix regexp to extract function names
+
 ## 0.2.1
 * Added specs
 * Include demo gif in README

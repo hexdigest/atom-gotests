@@ -68,6 +68,7 @@ describe('gotests', () => {
 
     it('finds correct go functions', () => {
       let text = 'package main' + nl + nl + 'func main()  {' + nl + '}' + nl
+      text += 'func ReadConfigFile(filePath string) ([]string, error) {' + nl + '}'
 
       runs(() => {
         let buffer = editor.getBuffer()
@@ -83,6 +84,7 @@ describe('gotests', () => {
       runs(() => {
         expect(functions).toBeDefined()
         expect(functions).toContain('main')
+        expect(functions).toContain('ReadConfigFile')
       })
     })
 
