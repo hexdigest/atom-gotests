@@ -1,3 +1,6 @@
+## 0.2.4
+* Further improved regexp for functions
+
 ## 0.2.3
 * Removed debug console output
 

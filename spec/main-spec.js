@@ -69,6 +69,7 @@ describe('gotests', () => {
     it('finds correct go functions', () => {
       let text = 'package main' + nl + nl + 'func main()  {' + nl + '}' + nl
       text += 'func ReadConfigFile(filePath string) ([]string, error) {' + nl + '}'
+      text += 'func  Strangely_named-Function  ( filePath string ) ( []string,error )  {' + nl + '}'
 
       runs(() => {
         let buffer = editor.getBuffer()
@@ -85,6 +86,7 @@ describe('gotests', () => {
         expect(functions).toBeDefined()
         expect(functions).toContain('main')
         expect(functions).toContain('ReadConfigFile')
+        expect(functions).toContain('Strangely_named-Function')
       })
     })
 
