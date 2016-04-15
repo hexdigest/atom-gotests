@@ -4,7 +4,7 @@
 
 ## Demo
 
-![demo](/gotests.gif)
+![demo](https://github.com/abulimov/atom-gotests/blob/master/gotests.gif)
 
 ## Installation
 
