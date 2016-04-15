@@ -1,3 +1,6 @@
+## 0.2.5
+* Fixed link for demo.gif in README
+
 ## 0.2.4
 * Further improved regexp for functions
 
