@@ -1,7 +1,7 @@
 {
   "name": "gotests",
   "main": "./lib/gotests",
-  "version": "0.2.5",
+  "version": "0.3.0",
   "description": "A plugin for generating better Go tests https://github.com/cweill/gotests",
   "keywords": [
     "golang",
