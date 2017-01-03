@@ -7,23 +7,37 @@ import temp from 'temp'
 
 describe('gotests', () => {
   let mainModule = null
+  let goconfig = null
+  let goget = null
   let nl = '\n'
 
   beforeEach(() => {
     waitsForPromise(() => {
-      return atom.packages.activatePackage('go-config').then(() => {
-        return atom.packages.activatePackage('language-go').then(() => {
-          return atom.packages.activatePackage('go-get')
-        })
-      }).then(() => {
-        return atom.packages.activatePackage('gotests')
-      }).then((pack) => {
-        mainModule = pack.mainModule
-      })
+      return atom.packages.activatePackage('language-go')
+    })
+    runs(() => {
+      atom.packages.triggerDeferredActivationHooks()
+      let pack = atom.packages.loadPackage('go-plus')
+      pack.activateNow()
+      atom.packages.triggerActivationHook('core:loaded-shell-environment')
+      atom.packages.triggerActivationHook('language-go:grammar-used')
+      mainModule = pack.mainModule
+      goconfig = mainModule.provideGoConfig()
+      goget = mainModule.provideGoGet()
+    })
+
+    waitsFor(() => { return mainModule && mainModule.loaded })
+
+    runs(() => {
+      let pack = atom.packages.loadPackage('gotests')
+      pack.activateNow()
+      mainModule = pack.mainModule
+      mainModule.consumeGoget(goget)
+      mainModule.consumeGoconfig(goconfig)
     })
 
     waitsFor(() => {
-      return mainModule.goconfig && mainModule.goget
+      return mainModule && mainModule.goconfig && mainModule.goget
     })
   })
 
@@ -40,14 +54,18 @@ describe('gotests', () => {
 
   describe('when we are generating tests for go file', () => {
     let filePath
+    let testFilePath
     let editor
     let saveSubscription
     let functions
     let directory
     beforeEach(() => {
-      directory = fs.realpathSync(temp.mkdirSync())
+      var tempName = temp.path();
+      directory = tempName.replace('.', '')
+      fs.mkdirSync(directory)
       atom.project.setPaths([directory])
       filePath = path.join(directory, 'main.go')
+      testFilePath = path.join(directory, 'main_test.go')
       fs.writeFileSync(filePath, '')
       waitsForPromise(() => {
         return atom.workspace.open(filePath).then((e) => {
@@ -64,6 +82,11 @@ describe('gotests', () => {
         saveSubscription.dispose()
       }
       functions = undefined
+      fs.unlinkSync(filePath)
+      try {
+        fs.unlinkSync(testFilePath)
+      } catch (e) {}
+      fs.rmdirSync(directory)
     })
 
     it('finds correct go functions', () => {
@@ -104,8 +127,7 @@ describe('gotests', () => {
       waitsFor(() => {
         let exists
         try {
-          let filePath = path.join(directory, 'main_test.go')
-          fs.accessSync(filePath, fs.F_OK)
+          fs.accessSync(testFilePath, fs.F_OK)
           exists = true
         } catch (e) {
           exists = false
@@ -114,9 +136,8 @@ describe('gotests', () => {
       })
 
       runs(() => {
-        let filePath = path.join(directory, 'main_test.go')
-        let content = fs.readFileSync(filePath, 'UTF-8')
-        expect(content).toMatch(/TestMain/)
+        let content = fs.readFileSync(testFilePath, 'UTF-8')
+        expect(content).toMatch(/func Test/)
       })
     })
   })

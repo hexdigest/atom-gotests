@@ -25,8 +25,7 @@
     "temp": "^0.8.3"
   },
   "package-deps": [
-    "go-config",
-    "go-get"
+    "go-plus"
   ],
   "consumedServices": {
     "go-config": {
@@ -36,7 +35,7 @@
     },
     "go-get": {
       "versions": {
-        "1.0.0": "consumeGoget"
+        "2.0.0": "consumeGoget"
       }
     }
   }
