@@ -4,6 +4,14 @@
 import fs from 'fs'
 import path from 'path'
 import temp from 'temp'
+import {lifecycle} from './spec-helpers'
+
+function setTextAndSave (editor, text) {
+  const buffer = editor.getBuffer()
+  buffer.setText(text)
+  editor.selectAll()
+  return Promise.resolve(buffer.save())
+}
 
 describe('gotests', () => {
   let mainModule = null
@@ -12,26 +20,21 @@ describe('gotests', () => {
   let nl = '\n'
 
   beforeEach(() => {
+    lifecycle.setup()
     waitsForPromise(() => {
-      return atom.packages.activatePackage('language-go')
+      return lifecycle.activatePackage()
     })
     runs(() => {
-      atom.packages.triggerDeferredActivationHooks()
-      let pack = atom.packages.loadPackage('go-plus')
-      pack.activateNow()
-      atom.packages.triggerActivationHook('core:loaded-shell-environment')
-      atom.packages.triggerActivationHook('language-go:grammar-used')
-      mainModule = pack.mainModule
-      goconfig = mainModule.provideGoConfig()
-      goget = mainModule.provideGoGet()
+      goconfig = lifecycle.mainModule.provideGoConfig()
+      goget = lifecycle.mainModule.provideGoGet()
+    })
+    waitsForPromise(() => {
+      return atom.packages.activatePackage('gotests').then((pack) => {
+        mainModule = pack.mainModule
+      })
     })
 
-    waitsFor(() => { return mainModule && mainModule.loaded })
-
     runs(() => {
-      let pack = atom.packages.loadPackage('gotests')
-      pack.activateNow()
-      mainModule = pack.mainModule
       mainModule.consumeGoget(goget)
       mainModule.consumeGoconfig(goconfig)
     })
@@ -39,6 +42,10 @@ describe('gotests', () => {
     waitsFor(() => {
       return mainModule && mainModule.goconfig && mainModule.goget
     })
+  })
+
+  afterEach(() => {
+    lifecycle.teardown()
   })
 
   describe('when the gotests package is activated', () => {
@@ -60,7 +67,7 @@ describe('gotests', () => {
     let functions
     let directory
     beforeEach(() => {
-      var tempName = temp.path();
+      var tempName = temp.path()
       directory = tempName.replace('.', '')
       fs.mkdirSync(directory)
       atom.project.setPaths([directory])
@@ -94,11 +101,8 @@ describe('gotests', () => {
       text += 'func ReadConfigFile(filePath string) ([]string, error) {' + nl + '}'
       text += 'func  Strangely_named-Function  ( filePath string ) ( []string,error )  {' + nl + '}'
 
-      runs(() => {
-        let buffer = editor.getBuffer()
-        buffer.setText(text)
-        editor.selectAll()
-        buffer.save()
+      waitsForPromise(() => {
+        return setTextAndSave(editor, text)
       })
 
       waitsFor(() => {
@@ -116,11 +120,11 @@ describe('gotests', () => {
     it('generates test file nearby', () => {
       let text = 'package main' + nl + nl + 'func main()  {' + nl + '}' + nl
 
+      waitsForPromise(() => {
+        return setTextAndSave(editor, text)
+      })
+
       runs(() => {
-        let buffer = editor.getBuffer()
-        buffer.setText(text)
-        buffer.save()
-        editor.selectAll()
         let target = atom.views.getView(editor)
         atom.commands.dispatch(target, 'gotests:generate')
       })
