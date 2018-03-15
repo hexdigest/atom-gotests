@@ -115,6 +115,7 @@ describe('gotests', () => {
         expect(functions).toContain('main')
         expect(functions).toContain('ReadConfigFile')
         expect(functions).toContain('Strangely_named-Function')
+        expect(functions).toContain('FuncWithReciever')
       })
     })
 
