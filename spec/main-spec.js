@@ -100,6 +100,7 @@ describe('gotests', () => {
       let text = 'package main' + nl + nl + 'func main()  {' + nl + '}' + nl
       text += 'func ReadConfigFile(filePath string) ([]string, error) {' + nl + '}'
       text += 'func  Strangely_named-Function  ( filePath string ) ( []string,error )  {' + nl + '}'
+      text += 'func(t *T) FuncWithReciever(a int) int {' + nl + '}'
 
       waitsForPromise(() => {
         return setTextAndSave(editor, text)
@@ -114,6 +115,7 @@ describe('gotests', () => {
         expect(functions).toContain('main')
         expect(functions).toContain('ReadConfigFile')
         expect(functions).toContain('Strangely_named-Function')
+        expect(functions).toContain('FuncWithReciever')
       })
     })
 
