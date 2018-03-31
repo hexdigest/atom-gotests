@@ -3,7 +3,7 @@
         "atom-text-editor[data-grammar~=\"go\"]:not([mini])": [
             {
                 "label": "Generate Go tests",
-                "command": "gotests:generate"
+                "command": "gounit:generate"
             }
         ]
     },
@@ -12,11 +12,11 @@
             "label": "Packages",
             "submenu": [
                 {
-                    "label": "Go tests",
+                    "label": "GoUnit",
                     "submenu": [
                         {
                             "label": "Generate",
-                            "command": "gotests:generate"
+                            "command": "gounit:generate"
                         }
                     ]
                 }

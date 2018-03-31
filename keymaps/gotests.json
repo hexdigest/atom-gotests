@@ -1,5 +1,5 @@
 {
     "atom-workspace": {
-        "ctrl-alt-shift-g t": "gotests:generate"
+        "ctrl-alt-shift-g t": "gounit:generate"
     }
 }

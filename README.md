@@ -1,11 +1,11 @@
-# Atom gotests plugin
+# Atom GoUnit plugin
 
-`Atom-gotests` makes writing better Go tests easy. It is an IDE plugin for Atom that uses [`gotests`](https://github.com/cweill/gotests) to generate [table driven tests](https://github.com/golang/go/wiki/TableDrivenTests) from selected function and method signatures. Any new dependencies in the test files are automatically imported.
+`Atom-gounit` makes writing better Go tests easy. It is an IDE plugin for Atom that uses [`gounit`](https://github.com/hexdigest/gounit) to generate [table driven tests](https://github.com/golang/go/wiki/TableDrivenTests) from selected function and method signatures. Any new dependencies in the test files are automatically imported.
 
 ## Demo
 
-![demo](https://github.com/abulimov/atom-gotests/blob/master/gotests.gif)
+![demo](https://github.com/hexdigest/atom-gounit/blob/master/gounit.gif)
 
 ## Installation
 
-`apm install gotests`
+`apm install gounit`

@@ -13,7 +13,7 @@ function setTextAndSave (editor, text) {
   return Promise.resolve(buffer.save())
 }
 
-describe('gotests', () => {
+describe('gounit', () => {
   let mainModule = null
   let goconfig = null
   let goget = null
@@ -29,7 +29,7 @@ describe('gotests', () => {
       goget = lifecycle.mainModule.provideGoGet()
     })
     waitsForPromise(() => {
-      return atom.packages.activatePackage('gotests').then((pack) => {
+      return atom.packages.activatePackage('gounit').then((pack) => {
         mainModule = pack.mainModule
       })
     })
@@ -48,7 +48,7 @@ describe('gotests', () => {
     lifecycle.teardown()
   })
 
-  describe('when the gotests package is activated', () => {
+  describe('when the gounit package is activated', () => {
     it('activates successfully', () => {
       expect(mainModule).toBeDefined()
       expect(mainModule).toBeTruthy()
@@ -128,7 +128,7 @@ describe('gotests', () => {
 
       runs(() => {
         let target = atom.views.getView(editor)
-        atom.commands.dispatch(target, 'gotests:generate')
+        atom.commands.dispatch(target, 'gounit:generate')
       })
       waitsFor(() => {
         let exists
